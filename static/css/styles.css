@@ -1,0 +1,364 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+* {
+    box-sizing: border-box;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body {
+    background: var(--bg-color, #f6f5f7);
+    color: var(--text-color, #333);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+    height: 100vh;
+    margin: -20px 0 50px;
+}
+
+h1 {
+    font-weight: bold;
+    margin: 0;
+}
+
+h2 {
+    text-align: center;
+}
+
+p {
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    margin: 20px 0 30px;
+}
+
+span {
+    font-size: 12px;
+}
+
+a {
+    color: var(--link-color, #333);
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0;
+}
+/*  خاص ب زر البتن  */
+button {
+    border-radius: 20px;
+    border: 1px solid var(--button-border, #FF4B2B);
+    background-color: var(--button-bg, #FF4B2B);
+    color: var(--button-text, #FFFFFF);
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+button:focus {
+    outline: none;
+}
+
+button.ghost {
+    background-color: transparent;
+    border-color: #FFFFFF;
+}
+/*  خاص ب  الفورم    */
+form {
+    background-color: var(--form-bg, #FFFFFF);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
+    text-align: center;
+}
+/*  خاص ب زر الانبت  */
+input {
+    background-color: var(--input-bg, #eee);
+    border: none;
+    padding: 12px 10px;
+    margin: 6px 0;
+    width: 100%;
+    border-radius: 15px;
+    color: var(--text-color, #333);
+}
+/*  الديف  الرئيسي  في الصفحة  */
+.container {
+    background-color: var(--form-bg, #fff);
+    border-radius:  99px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
+        0 10px 10px rgba(0, 0, 0, 0.22);
+    position: relative;
+    overflow: hidden;
+    width: 788px;
+    max-width: 100%;
+    min-height: 480px;
+}
+
+.form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.sign-in-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.container.right-panel-active .sign-in-container {
+    transform: translateX(100%);
+}
+
+.sign-up-container {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+}
+
+.container.right-panel-active .sign-up-container {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: show 0.6s;
+}
+
+@keyframes show {
+    0%, 49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
+
+    50%, 100% {
+        opacity: 1;
+        z-index: 5;
+    }
+}
+
+.overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+.container.right-panel-active .overlay-container {
+    transform: translateX(-100%);
+}
+
+.overlay {
+    background: #FF416C;
+    background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
+    background: linear-gradient(to right, #FF4B2B, #FF416C);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0 0;
+    color: #FFFFFF;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.container.right-panel-active .overlay {
+    transform: translateX(50%);
+}
+
+.overlay-panel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-left {
+    transform: translateX(-20%);
+}
+
+.container.right-panel-active .overlay-left {
+    transform: translateX(0);
+}
+
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
+}
+/*  خاص ب زر التحويل بين الصفحات   */
+.container.right-panel-active .overlay-right {
+    transform: translateX(20%);
+}
+/*  خاص ب الديف    */
+.social-container {
+    margin: 20px 0;
+}
+/*  خاص ب زر الينك  */
+.social-container a {
+    border: 1px solid #DDDDDD;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 5px;
+    height: 40px;
+    width: 40px;
+}
+/*  خاص ب زر ريسيت  */
+.reset {
+    width: 52%;
+    background-color: #ff4b2bb4;
+    font-size: 15px;
+    letter-spacing: 1px;
+    border-radius: 22px;
+    transition: 0.5s ease-in-out;
+    color: #eee;
+	margin-top: 20px;
+}
+/*  خاص ب زر ريسيت  */
+.reset:hover {
+    background-color: #f92803;
+    border-radius: 27px;
+    color: #eee;
+}
+/*  خاص ب زر الارسال  */
+.sub {
+    transition: 0.33s ease-in-out;
+    background-color: #ff4b2bb2;
+}
+/*  خاص ب زر ريسيت  */
+.sub:hover {
+    background-color: #ff2600;
+    border-radius: 24px;
+    font-size: 12px;
+}
+/*  خاص ب زر ايقونات المواقع  */
+.social {
+    background-color: #000000;
+    color: #DDDDDD;
+    transition: 0.33s ease-in-out;
+}
+
+.social:hover {
+    background-color: #fd3815;
+    color: #333;
+}
+/*  خاص ب زر التحويل النهاري واليلي  */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition:   0.3s ease, color 0.3s ease;
+    border: none;
+}
+
+.theme-toggle.light-mode {
+    background-color: #FFFFFF; /* أبيض */
+    color: #000000; /* أسود */
+}
+
+.theme-toggle.dark-mode {
+    background-color: #000000; /* أسود */
+    color: #FFFFFF; /* أبيض */
+}
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-container input {
+    flex: 1;
+    padding-right: 40px; /* مساحة للأيقونة */
+	width: 299px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    color: #888;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.toggle-password:hover {
+    color: #333;
+}
+/* تأثير الكتابة مع الثبات */
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+        border-right: none;
+    }
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+
+/* تطبيق الحركة مع الثبات */
+h1 {
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid;
+    width: 100%; /* عرض النص بالكامل */
+    animation: typing 2s steps(20, end) forwards, blink 0.5s step-end infinite alternate;
+    animation-fill-mode: forwards; /* تثبيت النص بعد انتهاء الحركة */
+}
+
+/* تعطيل حركة blink بعد انتهاء الكتابة */
+h1:after {
+    content: "";
+    display: inline-block;
+    width: 0;
+    animation: none;
+}
+/* حركة للأيقونات الاجتماعية */
+.social-container a:hover {
+    transform: rotate(15deg);
+    transition: transform 0.3s ease-in-out;
+}
+/* حركة للتبديل بين الليل والنهار */
+.theme-toggle {
+    transition: transform 0.5s ease-in-out;
+}
+
+.theme-toggle:hover {
+    transform: rotate(360deg);
+}

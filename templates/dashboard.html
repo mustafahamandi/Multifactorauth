@@ -1,0 +1,10 @@
+
+{%extends "base.html"%}
+{%block body%}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dash.css') }}">
+<div class="container">
+    <h1>Welcome {{username}}!</h1>
+    <p>Welcome to your dashboard</p>
+    <a href="{{url_for('logout')}}" class="btn_lgout">Logout</a>
+    </div>
+{%endblock%}

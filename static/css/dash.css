@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+* {
+    box-sizing: border-box;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body {
+    background: var(--bg-color, #f6f5f7);
+    color: var(--text-color, #333);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+    height: 100vh;
+    margin: 0;
+}
+
+h1 {
+    font-weight: bold;
+    margin: 0 0 20px;
+    font-size: 2rem;
+    text-align: center;
+    animation: typing 2s steps(20, end) forwards, blink 0.5s step-end infinite alternate;
+}
+
+p {
+    font-size: 1rem;
+    font-weight: 100;
+    line-height: 1.5;
+    text-align: center;
+    margin: 20px 0 30px;
+}
+
+.container {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
+        0 10px 10px rgba(0, 0, 0, 0.22);
+    padding: 40px;
+    max-width: 500px;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #ff4b2b;
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+a:hover {
+    background-color: #ff2600;
+    transform: scale(1.1);
+}
+
+
+h1:after {
+    content: "";
+    display: inline-block;
+    width: 0;
+    animation: none;
+}
+
+/* Add hover effects for Logout button */
+.btn_logout {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 14px;
+    background: #ff416c;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 30px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.btn_logout:hover {
+    background: #ff4b2b;
+}
