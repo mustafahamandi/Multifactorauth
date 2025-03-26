@@ -4,8 +4,8 @@ from datetime import datetime, timedelta
 from twilio.rest import Client
 
 # Twilio credentials 
-TWILIO_ACCOUNT_SID = ''
-TWILIO_AUTH_TOKEN = ''
+TWILIO_ACCOUNT_SID = 'your_account_sid'
+TWILIO_AUTH_TOKEN = 'your_auth_token'
 TWILIO_PHONE_NUMBER = ''
 
 # Initialize Twilio client
