@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, render_template, redirect, session,ur
 from flask_sqlalchemy import SQLAlchemy 
 import bcrypt
 import re
+from otp import send_otp, votp
 
 
 app = Flask(__name__)
@@ -9,6 +10,8 @@ app.secret_key = "3214454587264654"
 #config SQL Alchemy
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False 
+
+
 db = SQLAlchemy(app)
 
 #database
@@ -17,6 +20,7 @@ class User(db.Model):
     email = db.Column(db.String(100), unique = True, nullable = False)
     username = db.Column(db.String(25), unique = True, nullable = False)
     password = db.Column(db.String(150), nullable = False)
+    phone_number = db.Column(db.String(15), unique=True, nullable=True)
 
     def setpass(self, password):
         # Hash the password with a generated salt
@@ -25,6 +29,7 @@ class User(db.Model):
     def checkpass(self, password):
         # Check if the provided password matches the stored hashed password
         return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
+
 
 #data-validation
 
@@ -132,13 +137,66 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         session['username'] = username
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('register_phone'))
+    
+
+
+
+@app.route('/register-phone', methods=[ 'GET' , 'POST'])
+def register_phone():
+    if 'username' not in session:
+        return redirect(url_for('home'))
+
+    if request.method == 'POST':
+        country_code = request.form.get('countryCode')
+        phone_number = request.form.get('phoneNumber')
+        full_phone_number = f"{country_code}{phone_number}"
+
+        # Update the user's phone number in the database
+        user = User.query.filter_by(username=session['username']).first()
+        if user:
+            user.phone_number = full_phone_number
+            db.session.commit()
+
+            # Store phone number in session for OTP verification
+            session['phone_number'] = full_phone_number
+
+            # Send OTP to the user's phone number
+            send_otp(full_phone_number)
+            return redirect(url_for('verify_otp'))
+        else:
+            flash('User not found. Please try again.', 'error')
+            return redirect(url_for('register_phone'))
+
+    return render_template('register_phone.html')
+
+@app.route("/verify-otp", methods=[ "GET","POST"])
+def verify_otp():
+    if 'username' not in session:
+        return redirect(url_for('home'))
+
+    if request.method == 'POST':
+        otp = request.form.get('otp')
+        phone_number = session.get('phone_number')
+
+        # Verify the OTP
+        if votp(phone_number, otp):
+            # OTP is valid
+            session['otp_verified'] = True
+            return redirect(url_for('dashboard'))
+        else:
+            flash("Invalid or expired OTP. Please try again.", "error")
+            return redirect(url_for('verify_otp'))
+
+    return render_template('verify_otp.html')
 
 #dashboard
-@app.route('/dashboard')
+@app.route("/dashboard")
 def dashboard():
-    if "username" in session:
-        return render_template('dashboard.html', username = session['username'])
+    if 'username' in session and session.get('otp_verified'):
+        return render_template('dashboard.html', username=session['username'])
+    elif 'username' in session:
+        return redirect(url_for('verify_otp'))
     return redirect(url_for('home'))
 
 #logout
