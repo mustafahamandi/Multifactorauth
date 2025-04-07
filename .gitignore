@@ -12,6 +12,7 @@ venv/
 env/
 ENV/
 auth/
+.env
 
 # Package directories
 site-packages/
