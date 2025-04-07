@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OTP Verification</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #f6f5f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+            width: 400px;
+            max-width: 100%;
+            padding: 30px;
+        }
+        
+        h1 {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .context-info {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        input {
+            background-color: #eee;
+            border: none;
+            padding: 12px 15px;
+            margin: 8px 0;
+            width: 100%;
+            border-radius: 15px;
+        }
+        
+        button {
+            border-radius: 20px;
+            border: 1px solid #FF4B2B;
+            background-color: #FF4B2B;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in;
+            margin-top: 20px;
+        }
+        
+        button:active {
+            transform: scale(0.95);
+        }
+        
+        .resend {
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>OTP Verification</h1>
+        
+        <!-- Context will be filled dynamically -->
+        <div id="context-info" class="context-info">
+            {% if verification_type == 'registration' %}
+                <p>We're verifying your phone number for registration</p>
+                <p>Code sent to: <strong>{{ phone_number }}</strong></p>
+            {% else %}
+                <p>We're verifying your identity for login</p>
+                <p>Code sent to: <strong>{{ phone_last4 }}</strong></p>
+            {% endif %}
+        </div>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="status-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form method="POST" action="/verify-otp">
+            <input type="hidden" name="verification_type" value="{{ verification_type }}">
+            <input type="text" name="otp" placeholder="Enter 6-digit OTP" maxlength="6" pattern="\d{6}" required>
+            <button type="submit">Verify OTP</button>
+        </form>
+        
+        <div class="resend">
+            <p>Didn't receive the code? <a href="#" id="resend-link">Resend OTP</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('resend-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            fetch('/resend-otp', { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    verification_type: "{{ verification_type }}"
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('New OTP sent successfully!');
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
